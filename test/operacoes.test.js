@@ -74,3 +74,72 @@ describe('Suíte de Testes Fraca para 50 Operações Aritméticas', () => {
   test('49. deve calcular o triplo de um número', () => { expect(triplo(10)).toBe(30); });
   test('50. deve calcular a metade de um número', () => { expect(metade(20)).toBe(10); });
 });
+
+describe('Testes adicionais para matar mutantes sobreviventes', () => {
+  // === Mensagens de erro e validações de entrada ===
+  test('divisao deve lançar a mensagem correta para divisão por zero', () => {
+    expect(() => divisao(5, 0)).toThrow('Divisão por zero não é permitida.');
+  });
+  test('raizQuadrada deve lançar erro para número negativo', () => {
+    expect(() => raizQuadrada(-1)).toThrow('Não é possível calcular a raiz quadrada de um número negativo.');
+  });
+  test('raizQuadrada de zero deve ser zero (limite da validação)', () => { expect(raizQuadrada(0)).toBe(0); });
+  test('fatorial deve lançar erro para número negativo', () => {
+    expect(() => fatorial(-1)).toThrow('Fatorial não é definido para números negativos.');
+  });
+  test('fatorial de zero deve ser 1 (limite da validação)', () => { expect(fatorial(0)).toBe(1); });
+  test('fatorial de 1 deve ser 1', () => { expect(fatorial(1)).toBe(1); });
+  test('maximoArray deve lançar erro para array vazio', () => {
+    expect(() => maximoArray([])).toThrow('Array vazio не possui valor máximo.');
+  });
+  test('minimoArray deve lançar erro para array vazio', () => {
+    expect(() => minimoArray([])).toThrow('Array vazio не possui valor mínimo.');
+  });
+  test('inverso deve lançar erro para zero', () => {
+    expect(() => inverso(0)).toThrow('Não é possível inverter o número zero.');
+  });
+  test('medianaArray deve lançar erro para array vazio', () => {
+    expect(() => medianaArray([])).toThrow('Array vazio не possui mediana.');
+  });
+
+  // === Funções booleanas: testar também o caso falso ===
+  test('isPar deve retornar false para número ímpar', () => { expect(isPar(3)).toBe(false); });
+  test('isImpar deve retornar false para número par', () => { expect(isImpar(4)).toBe(false); });
+  test('isDivisivel deve retornar false quando há resto', () => { expect(isDivisivel(10, 3)).toBe(false); });
+  test('isMaiorQue deve retornar false quando a é menor que b', () => { expect(isMaiorQue(5, 10)).toBe(false); });
+  test('isMaiorQue deve retornar false para valores iguais', () => { expect(isMaiorQue(5, 5)).toBe(false); });
+  test('isMenorQue deve retornar false quando a é maior que b', () => { expect(isMenorQue(10, 5)).toBe(false); });
+  test('isMenorQue deve retornar false para valores iguais', () => { expect(isMenorQue(5, 5)).toBe(false); });
+  test('isEqual deve retornar false para valores diferentes', () => { expect(isEqual(7, 8)).toBe(false); });
+
+  // === isPrimo: limites e números compostos ===
+  test('isPrimo deve retornar false para 1', () => { expect(isPrimo(1)).toBe(false); });
+  test('isPrimo deve retornar false para 0', () => { expect(isPrimo(0)).toBe(false); });
+  test('isPrimo deve retornar false para número composto', () => { expect(isPrimo(9)).toBe(false); });
+  test('isPrimo deve retornar true para 2, o menor primo', () => { expect(isPrimo(2)).toBe(true); });
+
+  // === Conversões de temperatura com valores que expõem a fração 9/5 ===
+  test('celsiusParaFahrenheit deve converter 100 °C em 212 °F', () => { expect(celsiusParaFahrenheit(100)).toBe(212); });
+  test('fahrenheitParaCelsius deve converter 212 °F em 100 °C', () => { expect(fahrenheitParaCelsius(212)).toBe(100); });
+
+  // === clamp: valores fora do intervalo ===
+  test('clamp deve retornar o mínimo quando o valor está abaixo do intervalo', () => { expect(clamp(-5, 0, 10)).toBe(0); });
+  test('clamp deve retornar o máximo quando o valor está acima do intervalo', () => { expect(clamp(15, 0, 10)).toBe(10); });
+
+  // === mediaArray ===
+  test('mediaArray de array vazio deve ser 0, e não NaN', () => { expect(mediaArray([])).toBe(0); });
+
+  // === produtoArray ===
+  test('produtoArray de array vazio deve ser 1', () => { expect(produtoArray([])).toBe(1); });
+
+  // === medianaArray: arrays desordenados e de tamanho par ===
+  test('medianaArray deve ordenar o array antes de calcular (tamanho ímpar)', () => {
+    expect(medianaArray([5, 1, 3])).toBe(3);
+  });
+  test('medianaArray deve tirar a média dos dois elementos centrais (tamanho par)', () => {
+    expect(medianaArray([4, 1, 3, 2])).toBe(2.5);
+  });
+  test('medianaArray deve ordenar numericamente, não como texto', () => {
+    expect(medianaArray([10, 9, 100])).toBe(10);
+  });
+});
