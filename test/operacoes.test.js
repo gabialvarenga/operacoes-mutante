@@ -125,12 +125,21 @@ describe('Testes adicionais para matar mutantes sobreviventes', () => {
   // === clamp: valores fora do intervalo ===
   test('clamp deve retornar o mínimo quando o valor está abaixo do intervalo', () => { expect(clamp(-5, 0, 10)).toBe(0); });
   test('clamp deve retornar o máximo quando o valor está acima do intervalo', () => { expect(clamp(15, 0, 10)).toBe(10); });
+  // 0 e -0 são iguais para < e >, mas diferentes para toBe (Object.is):
+  // isso revela se a função devolveu o próprio valor ou o limite do intervalo.
+  test('clamp deve devolver o próprio valor quando ele é igual ao mínimo', () => { expect(clamp(0, -0, 10)).toBe(0); });
+  test('clamp deve devolver o próprio valor quando ele é igual ao máximo', () => { expect(clamp(-0, -10, 0)).toBe(-0); });
 
   // === mediaArray ===
   test('mediaArray de array vazio deve ser 0, e não NaN', () => { expect(mediaArray([])).toBe(0); });
 
   // === produtoArray ===
   test('produtoArray de array vazio deve ser 1', () => { expect(produtoArray([])).toBe(1); });
+  test('produtoArray deve retornar 1 para lista vazia sem depender do reduce', () => {
+    const listaVazia = [];
+    listaVazia.reduce = () => 99;
+    expect(produtoArray(listaVazia)).toBe(1);
+  });
 
   // === medianaArray: arrays desordenados e de tamanho par ===
   test('medianaArray deve ordenar o array antes de calcular (tamanho ímpar)', () => {
